@@ -1,54 +1,31 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
+			
+			pets: [ {id:1, name: "Frida", age: 2}, 
+				    {id:2, name: "Franz", age: 3}, 
+				    {id:3, name: "Fred", age: 5},
+				
 			]
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
+			addNewPet: (name) => {
+				const pets = getStore().pets;
 
-			getMessage: async () => {
-				try{
-					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
-				}catch(error){
-					console.log("Error loading message from backend", error)
+				let higherId = 0;
+				for (let x = 0; x < pets.length; x++) {
+					if (pets[x].id > higherId) {
+						higherId = pets[x].id;
+					}
 				}
-			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			}
+				let newPet = { id: higherId + 1, name: name }
+				setStore({ pets: [...pets, newPet] })
 		}
+
+	}
 	};
 };
+
 
 export default getState;

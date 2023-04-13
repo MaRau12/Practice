@@ -38,6 +38,7 @@ class Pet(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "age": self.age
             # do not serialize the password, its a security breach
         }
 
